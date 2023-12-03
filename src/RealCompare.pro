@@ -3,24 +3,20 @@ LANGUAGE = C++
 
 TARGET = Notepad--
 
-CONFIG	+= qt warn_on
+CONFIG	+= qt warn_on Release
 
-QT += core gui widgets concurrent network xmlpatterns
-
+QT += core gui widgets concurrent network macextras
 
 HEADERS	+= *.h \
-        cceditor/ccnotepad.h \
-        cceditor/filemanager.h
-
+           cceditor/ccnotepad.h \
+           cceditor/filemanager.h
 		
-SOURCES	+= *.cpp \
-                cceditor/ccnotepad.cpp \
-                cceditor/filemanager.cpp
-
+SOURCES	+= *.cpp  \
+           cceditor/ccnotepad.cpp \
+           cceditor/filemanager.cpp
 		
 FORMS += *.ui \
-                cceditor/ccnotepad.ui
-
+         cceditor/ccnotepad.ui
 
 RESOURCES += RealCompare.qrc
 
@@ -29,11 +25,12 @@ INCLUDEPATH	+= qscint/src/Qsci
 INCLUDEPATH	+= qscint/scintilla/include
 INCLUDEPATH += cceditor
 
-#DEFINES +=  QSCINTILLA_DLL
+DEFINES +=  QSCINTILLA_DLL
 
 TRANSLATIONS += realcompare_zh.ts
-
- if(contains(QMAKE_HOST.arch, x86_64|loongarch64)){
+	
+win32 {
+   if(contains(QMAKE_HOST.arch, x86_64)){
     CONFIG(Debug, Debug|Release){
         DESTDIR = x64/Debug
 		LIBS	+= -Lx64/Debug
@@ -42,38 +39,59 @@ TRANSLATIONS += realcompare_zh.ts
         DESTDIR = x64/Release
 		LIBS	+= -Lx64/Release
 		LIBS += -lqmyedit_qt5
-        #QMAKE_CXXFLAGS += /openmp
     }
    }
+}
+
+
+win32{
+	if(contains(QMAKE_HOST.arch, x86_64)){
+		if(CONFIG(Debug, Debug|Release)){
+			LIBS += -Llib64/Debug -llibprotobufd
+		}else{
+			LIBS += -Llib64/Release -llibprotobuf
+		}
+   }else{
+		if(CONFIG(Debug, Debug|Release)){
+			LIBS += -Llib32/Debug -llibprotobufd
+		}else{
+			LIBS += -Llib32/Release -llibprotobuf
+		}
+	}
+}
+
 unix{
-if(CONFIG(debug, Debug|Release)){
-          LIBS += -L/home/yzw/build/CCNotePad/x64/Debug -lqmyedit_qt5
 
-QMAKE_CXXFLAGS += -fopenmp
-LIBS += -lgomp -lpthread
+    if(CONFIG(Debug, Debug|Release)){
+              LIBS += -L/usr/local/Cellar/protobuf/25.1/lib/  -lprotobuf
+              #LIBS += -L/Users/yinzuowei/work/CCNotePad/x64/Debug -lqmyedit_qt5_debug
+              LIBS += -L/Users/mpan/src/notepad--/src/x64/Release -lqmyedit_qt5
     }else{
-          LIBS += -L/home/yzw/build/CCNotePad/x64/Release -lqmyedit_qt5
-        DESTDIR = x64/Release
-
-        QMAKE_CXXFLAGS += -fopenmp -O2
-        LIBS += -lgomp -lpthread
+              LIBS += -L/usr/local/Cellar/protobuf/25.1/lib/ -lprotobuf
+              LIBS += -L/Users/mpan/src/notepad--/src/x64/Release -lqmyedit_qt5
+              DESTDIR = x64/Release
+              #QMAKE_CXXFLAGS += -fopenmp -O2
+              #LIBS += -lgomp -lpthread
     }
-   }
+}
+
+
+win32
+{
+INCLUDEPATH += f://protobuf-3.11.4/src
+}
+
+unix
+{
+INCLUDEPATH += /usr/local/Cellar/protobuf/25.1/include
+}
 
 
 RC_FILE += RealCompare.rc
-unix
-{
 
-INCLUDEPATH += $$PWD/.
-DEPENDPATH += $$PWD/.
+ICON = mac.icns
 
+DISTFILES += \
+    RealCompare.rc
 
-unix:!macx: LIBS += -L$$PWD/x64/Release/ -lqmyedit_qt5
-
-INCLUDEPATH += $$PWD/x64/Release
-DEPENDPATH += $$PWD/x64/Release
-
-unix:!macx: PRE_TARGETDEPS += $$PWD/x64/Release/libqmyedit_qt5.a
-}
-
+CONFIG+=sdk_no_version_check

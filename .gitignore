@@ -475,3 +475,4 @@ compile_commands.json
 [Bb]uild/
 .vscode/
 .vs/
+.DS_Store
