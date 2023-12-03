@@ -1242,7 +1242,7 @@ void CCNotePad::quickshow()
 		restoreGeometry(lastGeo);
 	}
 
-	show();
+	
 
 	QCoreApplication::processEvents();
 
@@ -1393,6 +1393,8 @@ void CCNotePad::quickshow()
 
 	//恢复用户自定义快捷键
 	setUserDefShortcutKey();
+
+	show();
 }
 
 void CCNotePad::on_lineEndChange(int index)
