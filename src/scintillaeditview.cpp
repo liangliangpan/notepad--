@@ -1980,6 +1980,14 @@ void ScintillaEditView::contextUserDefineMenuEvent(QMenu* menu)
 			});
 		
 	}
+
+	if(StyleSet::isCurrentDeepStyle()){
+		const char* menuDarkStyle="QMenu::item {color: rgb(255,255,255);background:rgb(114, 120, 126);}\
+			QMenu::item:selected {color: rgb(255,255,255);background:rgb(155, 155, 155);}\
+			QMenu::item:disabled {color: rgb(170,170,170);background:rgb(114, 120, 126);} ";
+		m_styleColorMenu->setStyleSheet(menuDarkStyle);
+		menu->setStyleSheet(menuDarkStyle);
+	}
 	menu->show();
 }
 

@@ -267,6 +267,7 @@ int getDocTypeProperty(QWidget* pwidget)
 //#define STYLE_DEEPBLUE
 
 #define STYLE_NOTEPAD
+//#define STYLE_BLACK
 
 #ifdef STYLE_BLACK
 const char *NewFileIcon = ":/Resources/edit/styleblack/newfile.png";
@@ -1135,11 +1136,6 @@ CCNotePad::CCNotePad(bool isMainWindows, QWidget *parent)
 			break;
 		}
 
-		//ui.editTabWidget->setStyleSheet("background-color: black;");
-		//QTabBar* pBar = ui.editTabWidget->tabBar();
-		//pBar->setStyleSheet("background-color: black;");
-
-
 #if 0
 	if (s_padInstances == nullptr)
 	{
@@ -1273,6 +1269,22 @@ void CCNotePad::quickshow()
 
 	connect(pBar, &QTabBar::tabCloseRequested, this, &CCNotePad::slot_tabClose);
 
+	if(StyleSet::isCurrentDeepStyle()){
+		//this style is for deep style
+		ui.centralWidget->setStyleSheet("background-color: rgb(114, 120, 126);");
+		QTabBar* pBar = ui.editTabWidget->tabBar();
+		pBar->setStyleSheet("background-color: rgb(114, 120, 126);");
+
+		ui.statusBar->setStyleSheet("background-color: rgb(199, 203, 209);");
+
+		//widget 背景色属性
+		//ui.editTabWidget->setAttribute(Qt::WA_StyledBackground);
+		ui.editTabWidget->setStyleSheet("QTabWidget#tabWidget{background-color:rgb(114, 120, 126);}\
+				QTabBar::tab{background-color:rgb(94,100,106);color:rgb(220,220,220);}\
+				QToolTip{background-color:rgb(255,255,255);color:rgb(0,0,0);}\
+				QTabBar::tab::selected{background-color:rgb(114,120,126);color:rgb(255,255,255);}");
+
+	}
 
 	m_codeStatusLabel = new QLabel("UTF8", ui.statusBar);
 	m_lineEndLabel = new QComboBox(ui.statusBar);
