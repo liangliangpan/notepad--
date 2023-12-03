@@ -1275,7 +1275,7 @@ void CCNotePad::quickshow()
 		QTabBar* pBar = ui.editTabWidget->tabBar();
 		pBar->setStyleSheet("background-color: rgb(114, 120, 126);");
 
-		ui.statusBar->setStyleSheet("background-color: rgb(199, 203, 209);");
+		ui.statusBar->setStyleSheet("background-color: rgb(90, 90, 90);color:rgb(230,230,230)");
 
 		//widget 背景色属性
 		//ui.editTabWidget->setAttribute(Qt::WA_StyledBackground);
