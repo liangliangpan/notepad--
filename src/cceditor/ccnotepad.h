@@ -494,6 +494,7 @@ private:
 	QLabel* m_lineNumLabel;
 	QLabel* m_langDescLabel;
 	QLabel* m_zoomLabel;
+	QLabel* m_selLabel;
 
 	QMenu* m_tabRightClickMenu;
 

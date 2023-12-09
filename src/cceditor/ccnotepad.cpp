@@ -1235,12 +1235,12 @@ CCNotePad::~CCNotePad()
 //先快速让窗口展示处理，后续再去做复杂的初始化
 void CCNotePad::quickshow()
 {
-	QByteArray lastGeo = NddSetting::getKeyByteArrayValue(WIN_POS);
+	// QByteArray lastGeo = NddSetting::getKeyByteArrayValue(WIN_POS);
 
-	if (!lastGeo.isEmpty())
-	{
-		restoreGeometry(lastGeo);
-	}
+	// if (!lastGeo.isEmpty())
+	// {
+	// 	restoreGeometry(lastGeo);
+	// }
 
 	
 
@@ -1275,7 +1275,7 @@ void CCNotePad::quickshow()
 		QTabBar* pBar = ui.editTabWidget->tabBar();
 		pBar->setStyleSheet("background-color: rgb(114, 120, 126);");
 
-		ui.statusBar->setStyleSheet("background-color: rgb(90, 90, 90);color:rgb(230,230,230)");
+		ui.statusBar->setStyleSheet("height:10px;background-color: rgb(114, 120, 126);color:rgb(230,230,230)");
 
 		//widget 背景色属性
 		//ui.editTabWidget->setAttribute(Qt::WA_StyledBackground);
@@ -1301,19 +1301,22 @@ void CCNotePad::quickshow()
 	m_langDescLabel = new QLabel("Txt", ui.statusBar);
 
 	m_zoomLabel = new QLabel("Zoom", ui.statusBar);
+	m_selLabel = new QLabel("Sel", ui.statusBar);
 
 	m_codeStatusLabel->setMinimumWidth(120);
 	m_lineEndLabel->setMinimumWidth(100);
 	m_lineNumLabel->setMinimumWidth(120);
 	m_langDescLabel->setMinimumWidth(100);
 	m_zoomLabel->setMinimumWidth(100);
+	m_selLabel->setMinimumWidth(100);
 
 	//0在前面，越小越在左边
 	ui.statusBar->insertPermanentWidget(0, m_zoomLabel);
 	ui.statusBar->insertPermanentWidget(1, m_langDescLabel);
 	ui.statusBar->insertPermanentWidget(2, m_lineNumLabel);
-	ui.statusBar->insertPermanentWidget(3, m_lineEndLabel);
-	ui.statusBar->insertPermanentWidget(4, m_codeStatusLabel);
+	ui.statusBar->insertPermanentWidget(3, m_selLabel);
+	ui.statusBar->insertPermanentWidget(4, m_lineEndLabel);
+	ui.statusBar->insertPermanentWidget(5, m_codeStatusLabel);
 
 
 	initToolBar();
@@ -1352,12 +1355,7 @@ void CCNotePad::quickshow()
 	//只有主窗口才监控openwith的文件
 	if (m_isMainWindows)
 	{
-
 		initNotePadSqlOptions();
-
-
-
-
 	}
 
 	m_isInitBookMarkAct = false;
@@ -1395,6 +1393,13 @@ void CCNotePad::quickshow()
 	setUserDefShortcutKey();
 
 	show();
+
+	QByteArray lastGeo = NddSetting::getKeyByteArrayValue(WIN_POS);
+
+	if (!lastGeo.isEmpty())
+	{
+		restoreGeometry(lastGeo);
+	}
 }
 
 void CCNotePad::on_lineEndChange(int index)
@@ -3356,7 +3361,7 @@ void CCNotePad::initToolBar()
 void CCNotePad::setZoomLabelValue(int zoomValue)
 {
 	m_zoomLabel->setText(tr("Zoom: %1%").arg(zoomValue));
-		}
+}
 
 void CCNotePad::slot_changeIconSize(QAction *action)
 {
@@ -3846,6 +3851,15 @@ void  CCNotePad::slot_LineNumIndexChange(int line, int index)
 		break;
 	}
 	m_lineNumLabel->setText(lineNums);
+
+	if (pEdit->hasSelectedText())
+	{
+		QString selectText = pEdit->selectedText();
+		m_selLabel->setText(tr("Sel: %1").arg(selectText.length()));
+	}else{
+		m_selLabel->setText(tr("Sel: %1").arg(0));
+	}
+	
 }
 
 //打开监控文件修改的信号
